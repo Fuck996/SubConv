@@ -25,6 +25,7 @@ async def pack(
     base_url: str,
     template_name: str,
     template_config: config.TemplateConfig,
+    client: str = "mihomo",
 ) -> str:
     providerProxyNames = await subscription.mkListProxyNames(content)
     result: ProxyMapping = {}
@@ -319,7 +320,8 @@ async def pack(
 
     result.update(rules)
 
-    _normalize_dns_for_compatibility(result)
+    if client != "mihomo":
+        _normalize_dns_for_compatibility(result)
 
     yaml.SafeDumper.ignore_aliases = lambda self, data: True
 

@@ -35,6 +35,13 @@
                     </el-select>
                 </el-form-item>
 
+                <el-form-item label="客户端">
+                    <el-select v-model="selectedClient" style="width: 200px">
+                        <el-option label="mihomo" value="mihomo"></el-option>
+                        <el-option label="Stash (iOS)" value="stash"></el-option>
+                    </el-select>
+                </el-form-item>
+
                 <el-form-item label="代理规则集">
                     <el-switch v-model="proxy_switch" active-text="关闭后将直接从GitHub获取规则集而非通过本服务器代理"></el-switch>
                 </el-form-item>
@@ -107,6 +114,7 @@ const isLoadingRuntimeConfig = ref(true)
 const hasRuntimeConfigError = ref(false)
 const standby_switch = ref(false)
 const proxy_switch = ref(true)
+const selectedClient = ref('mihomo')
 
 const templateOptions = computed(() => [
     ...availableTemplates.value.map((templateName) => ({
@@ -223,6 +231,9 @@ const submitForm = () => {
         }
         if (!proxy_switch.value) {
             result += "&npr=1";
+        }
+        if (selectedClient.value !== 'mihomo') {
+            result += "&client=" + encodeURIComponent(selectedClient.value);
         }
     } else {
         ElMessage({

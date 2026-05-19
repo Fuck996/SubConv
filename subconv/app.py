@@ -73,6 +73,7 @@ async def sub(request: Request):
     interval = args.get("interval", "1800")
     short = args.get("short")
     notproxyrule = args.get("npr")
+    client = args.get("client", "mihomo")
     template_name = _resolve_template_name(args.get("template"))
     template_config = await _load_template(template_name)
 
@@ -151,6 +152,7 @@ async def sub(request: Request):
         base_url=str(request.base_url),
         template_name=template_name,
         template_config=template_config,
+        client=client,
     )
     return Response(content=result, headers=headers)
 
