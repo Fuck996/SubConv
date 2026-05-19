@@ -6,9 +6,22 @@
       <header class="header">
         <div class="header-left">
           <h1 class="title-doto">SUBCONV</h1>
-          <span class="title-sub">SUBSCRIPTION CONVERTER</span>
+          <span class="title-sub">{{ T.subtitle }}</span>
         </div>
         <div class="header-right">
+          <!-- CN / EN language toggle -->
+          <div class="mode-seg" role="group" :aria-label="isEN ? 'Language' : '语言'">
+            <button
+              :class="['mode-seg-btn', { 'mode-seg-active': !isEN }]"
+              type="button"
+              @click="isEN = false"
+            >中</button>
+            <button
+              :class="['mode-seg-btn', { 'mode-seg-active': isEN }]"
+              type="button"
+              @click="isEN = true"
+            >EN</button>
+          </div>
           <!-- Nothing-style LIGHT · DARK segmented mode toggle -->
           <div class="mode-seg" role="group" aria-label="色彩模式">
             <button
@@ -47,27 +60,27 @@
 
         <!-- SUBSCRIPTION -->
         <div class="field">
-          <label class="field-label">SUBSCRIPTION</label>
+          <label class="field-label">{{ T.subscription }}</label>
           <textarea
             class="input-area"
             v-model="linkInput"
             rows="4"
-            placeholder="粘贴订阅链接或分享链接，多条链接换行或用 | 分隔"
+            :placeholder="T.subPlaceholder"
           ></textarea>
         </div>
 
         <!-- TEMPLATE + CLIENT -->
         <div class="row-two">
           <div class="field">
-            <label class="field-label">TEMPLATE</label>
+            <label class="field-label">{{ T.template }}</label>
             <div class="select-wrapper">
               <select
                 class="input-select"
                 v-model="selectedTemplate"
                 :disabled="isLoadingRuntimeConfig || hasRuntimeConfigError"
               >
-                <option v-if="isLoadingRuntimeConfig" value="" disabled>[LOADING...]</option>
-                <option v-else-if="hasRuntimeConfigError" value="" disabled>[ERROR]</option>
+                <option v-if="isLoadingRuntimeConfig" value="" disabled>{{ T.loading }}</option>
+                <option v-else-if="hasRuntimeConfigError" value="" disabled>{{ T.loadErr }}</option>
                 <option
                   v-for="t in availableTemplates"
                   :key="t"
@@ -78,7 +91,7 @@
             </div>
           </div>
           <div class="field">
-            <label class="field-label">CLIENT</label>
+            <label class="field-label">{{ T.client }}</label>
             <div class="segmented">
               <button
                 v-for="c in clientOptions"
@@ -94,42 +107,42 @@
         <!-- OPTIONS ROW -->
         <div class="row-two">
           <div class="field">
-            <label class="field-label">PROXY RULESET</label>
+            <label class="field-label">{{ T.proxyRuleset }}</label>
             <div class="toggle-row" @click="proxy_switch = !proxy_switch">
               <div class="toggle" :class="{ 'toggle-on': proxy_switch }">
                 <div class="toggle-thumb"></div>
               </div>
-              <span class="toggle-label">{{ proxy_switch ? 'ON' : 'OFF' }}</span>
+              <span class="toggle-label">{{ proxy_switch ? T.on : T.off }}</span>
             </div>
           </div>
           <div class="field">
-            <label class="field-label">STANDBY NODES</label>
+            <label class="field-label">{{ T.standbyNodes }}</label>
             <div class="toggle-row" @click="standby_switch = !standby_switch">
               <div class="toggle" :class="{ 'toggle-on': standby_switch }">
                 <div class="toggle-thumb"></div>
               </div>
-              <span class="toggle-label">{{ standby_switch ? 'ON' : 'OFF' }}</span>
+              <span class="toggle-label">{{ standby_switch ? T.on : T.off }}</span>
             </div>
           </div>
         </div>
 
         <!-- STANDBY INPUT -->
         <div class="field" v-if="standby_switch">
-          <label class="field-label">STANDBY LINKS</label>
+          <label class="field-label">{{ T.standbyLinks }}</label>
           <textarea
             class="input-area"
             v-model="standby"
             rows="3"
-            placeholder="备用节点链接，多条换行或用 | 分隔"
+            :placeholder="T.standbyPlaceholder"
           ></textarea>
         </div>
 
         <!-- INTERVAL -->
         <div class="field field-narrow">
-          <label class="field-label">UPDATE INTERVAL</label>
+          <label class="field-label">{{ T.interval }}</label>
           <div class="inline-input">
             <input class="input-text" v-model="time" type="text" placeholder="1800" maxlength="10" />
-            <span class="input-suffix">SEC</span>
+            <span class="input-suffix">{{ T.sec }}</span>
           </div>
         </div>
 
@@ -138,15 +151,15 @@
 
         <!-- ACTIONS -->
         <div class="actions">
-          <button class="btn-primary" type="button" @click="submitForm">GENERATE</button>
-          <button class="btn-secondary" type="button" @click="copyForm" :disabled="!linkOutput">COPY</button>
+          <button class="btn-primary" type="button" @click="submitForm">{{ T.generate }}</button>
+          <button class="btn-secondary" type="button" @click="copyForm" :disabled="!linkOutput">{{ T.copy }}</button>
         </div>
 
         <!-- OUTPUT -->
         <div class="field output-field" v-if="linkOutput">
-          <label class="field-label">OUTPUT URL</label>
+          <label class="field-label">{{ T.outputUrl }}</label>
           <textarea class="input-area input-output" v-model="linkOutput" rows="2" readonly></textarea>
-          <span v-if="copySuccess" class="copy-status">[COPIED]</span>
+          <span v-if="copySuccess" class="copy-status">{{ T.copied }}</span>
         </div>
 
       </form>
@@ -164,7 +177,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 
 // ── state ──────────────────────────────────────────────────────────────────
 const isDark = ref(true)
@@ -187,6 +200,60 @@ const clientOptions = [
   { label: 'MIHOMO', value: 'mihomo' },
   { label: 'STASH', value: 'stash' },
 ]
+
+// ── i18n ────────────────────────────────────────────────────────────────────
+const isEN = ref(false)
+const i18n = {
+  zh: {
+    subtitle:          '订阅转换器',
+    subscription:      '订阅链接',
+    subPlaceholder:    '粘贴订阅链接或分享链接，多条链接换行或用 | 分隔',
+    template:          '模板',
+    client:            '客户端',
+    proxyRuleset:      '代理规则集',
+    standbyNodes:      '备用节点',
+    standbyLinks:      '备用链接',
+    standbyPlaceholder:'备用节点链接，多条换行或用 | 分隔',
+    interval:          '更新间隔',
+    outputUrl:         '输出链接',
+    generate:          '生成',
+    copy:              '复制',
+    on:                '开',
+    off:               '关',
+    sec:               '秒',
+    loading:           '[加载中...]',
+    loadErr:           '[错误]',
+    copied:            '[已复制]',
+    errTemplateLoad:   '[错误：模板配置加载失败，请刷新重试]',
+    errEmptyUrl:       '[错误：订阅链接不能为空]',
+    errInterval:       '[错误：更新间隔必须为正整数]',
+  },
+  en: {
+    subtitle:          'SUBSCRIPTION CONVERTER',
+    subscription:      'SUBSCRIPTION',
+    subPlaceholder:    'Paste subscription URLs, separated by newline or |',
+    template:          'TEMPLATE',
+    client:            'CLIENT',
+    proxyRuleset:      'PROXY RULESET',
+    standbyNodes:      'STANDBY NODES',
+    standbyLinks:      'STANDBY LINKS',
+    standbyPlaceholder:'Standby node URLs, separated by newline or |',
+    interval:          'UPDATE INTERVAL',
+    outputUrl:         'OUTPUT URL',
+    generate:          'GENERATE',
+    copy:              'COPY',
+    on:                'ON',
+    off:               'OFF',
+    sec:               'SEC',
+    loading:           '[LOADING...]',
+    loadErr:           '[ERROR]',
+    copied:            '[COPIED]',
+    errTemplateLoad:   '[ERROR: Failed to load template config, please refresh]',
+    errEmptyUrl:       '[ERROR: Subscription URL cannot be empty]',
+    errInterval:       '[ERROR: Interval must be a positive integer]',
+  },
+} as const
+const T = computed(() => isEN.value ? i18n.en : i18n.zh)
 
 // ── template loading ────────────────────────────────────────────────────────
 const sleep = (ms: number) => new Promise((r) => window.setTimeout(r, ms))
@@ -222,7 +289,7 @@ const initializeTemplateSelection = async () => {
       selectedTemplate.value = null
       hasRuntimeConfigError.value = true
       isLoadingRuntimeConfig.value = false
-      errorMsg.value = '[ERROR: 模板配置加载失败，请刷新重试]'
+      errorMsg.value = T.value.errTemplateLoad
     }
   }
 }
@@ -233,15 +300,15 @@ onMounted(initializeTemplateSelection)
 const submitForm = () => {
   errorMsg.value = ''
   if (!linkInput.value.trim()) {
-    errorMsg.value = '[ERROR: 订阅链接不能为空]'
+    errorMsg.value = T.value.errEmptyUrl
     return
   }
   if (!selectedTemplate.value) {
-    errorMsg.value = '[ERROR: 模板配置加载失败，请刷新重试]'
+    errorMsg.value = T.value.errTemplateLoad
     return
   }
   if (time.value && !/^[1-9][0-9]*$/.test(time.value)) {
-    errorMsg.value = '[ERROR: 更新间隔必须为正整数]'
+    errorMsg.value = T.value.errInterval
     return
   }
 
