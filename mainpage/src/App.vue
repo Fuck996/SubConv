@@ -9,14 +9,29 @@
           <span class="title-sub">SUBSCRIPTION CONVERTER</span>
         </div>
         <div class="header-right">
-          <button class="mode-btn" type="button" @click="isDark = !isDark" :title="isDark ? '切换亮色' : '切换暗色'">
-            <svg v-if="isDark" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="2" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-            </svg>
-            <svg v-else width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-            </svg>
-          </button>
+          <!-- Nothing-style LIGHT · DARK segmented mode toggle -->
+          <div class="mode-seg" role="group" aria-label="色彩模式">
+            <button
+              :class="['mode-seg-btn', { 'mode-seg-active': !isDark }]"
+              type="button"
+              @click="isDark = false"
+            >
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="2" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+              </svg>
+              <span>LIGHT</span>
+            </button>
+            <button
+              :class="['mode-seg-btn', { 'mode-seg-active': isDark }]"
+              type="button"
+              @click="isDark = true"
+            >
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+              </svg>
+              <span>DARK</span>
+            </button>
+          </div>
           <a href="https://github.com/SubConv/SubConv" class="github-link" target="_blank" rel="noopener noreferrer" title="GitHub">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
               <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
@@ -263,8 +278,9 @@ const copyForm = async () => {
   --text-secondary:  #999999;
   --text-primary:    #E8E8E8;
   --text-display:    #FFFFFF;
-  --accent:          #D71921;
-  --interactive:     #5B9BF6;
+  --accent:          #FF6600;
+  --accent-subtle:   rgba(255,102,0,0.15);
+  --interactive:     #FF6600;
 }
 .light {
   --bg:              #F5F5F5;
@@ -276,8 +292,9 @@ const copyForm = async () => {
   --text-secondary:  #666666;
   --text-primary:    #1A1A1A;
   --text-display:    #000000;
-  --accent:          #D71921;
-  --interactive:     #007AFF;
+  --accent:          #E85500;
+  --accent-subtle:   rgba(232,85,0,0.12);
+  --interactive:     #E85500;
 }
 
 /* ── RESET / BASE ─────────────────────────────────────────────────────────── */
@@ -334,20 +351,38 @@ const copyForm = async () => {
   gap: 12px;
   padding-bottom: 4px;
 }
-.mode-btn {
-  background: none;
+/* Nothing-style LIGHT · DARK segmented mode toggle */
+.mode-seg {
+  display: inline-flex;
   border: 1px solid var(--border-visible);
   border-radius: 999px;
-  color: var(--text-secondary);
+  overflow: hidden;
+  height: 32px;
+  background: transparent;
+  position: relative;
+}
+.mode-seg-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-disabled);
   cursor: pointer;
-  width: 36px;
-  height: 36px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  transition: border-color 150ms, color 150ms;
+  gap: 5px;
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.07em;
+  padding: 0 14px;
+  text-transform: uppercase;
+  transition: background 200ms ease-out, color 200ms ease-out;
+  white-space: nowrap;
 }
-.mode-btn:hover { border-color: var(--text-secondary); color: var(--text-primary); }
+.mode-seg-btn:hover:not(.mode-seg-active) { color: var(--text-secondary); }
+.mode-seg-active {
+  background: var(--text-display);
+  color: var(--bg);
+}
 .github-link {
   color: var(--text-secondary);
   display: flex;
