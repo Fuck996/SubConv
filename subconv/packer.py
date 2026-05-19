@@ -319,9 +319,47 @@ async def pack(
 
     result.update(rules)
 
+    _normalize_dns_for_compatibility(result)
+
     yaml.SafeDumper.ignore_aliases = lambda self, data: True
 
     return yaml.safe_dump(result, allow_unicode=True, sort_keys=False)
+
+
+def _normalize_dns_for_compatibility(result: ProxyMapping) -> None:
+    """Strip mihomo-specific proxy-routing suffixes (#group-name) from DNS server URLs
+    and convert nameserver-policy list values to single strings, so that the output
+    is compatible with standard Clash clients such as Stash on iOS.
+
+    mihomo allows multiple DNS servers per nameserver-policy entry (as a list) and
+    supports routing queries through a proxy group via the '#name' URL fragment.
+    Neither feature is understood by Stash, causing YAML unmarshal errors.
+    """
+    dns = result.get("dns")
+    if not isinstance(dns, dict):
+        return
+
+    # Strip #proxy-group routing suffix from plain DNS server list fields
+    for field in ("nameserver", "fallback", "proxy-server-nameserver", "default-nameserver"):
+        servers = dns.get(field)
+        if isinstance(servers, list):
+            dns[field] = [
+                s.split("#")[0] if isinstance(s, str) and "#" in s else s
+                for s in servers
+            ]
+
+    # nameserver-policy values can be a list in mihomo but must be a string in Stash.
+    # Convert list → first entry, then strip the routing suffix.
+    policy = dns.get("nameserver-policy")
+    if isinstance(policy, dict):
+        normalized: dict[str, str] = {}
+        for k, v in policy.items():
+            if isinstance(v, list):
+                v = v[0] if v else ""
+            if isinstance(v, str) and "#" in v:
+                v = v.split("#")[0]
+            normalized[k] = v
+        dns["nameserver-policy"] = normalized
 
 
 def _group_proxies(group: ProxyMapping) -> list[str]:
