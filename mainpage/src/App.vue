@@ -167,9 +167,9 @@
       <!-- ── FOOTER ── -->
       <footer class="footer">
         <span>API / UI —&nbsp;</span>
-        <a href="https://github.com/SubConv/SubConv" target="_blank" rel="noopener noreferrer" class="footer-link">SubConv</a>
+        <a href="https://github.com/Fuck996/SubConv" target="_blank" rel="noopener noreferrer" class="footer-link">SubConv</a>
         <span>&nbsp;·&nbsp;UI by&nbsp;</span>
-        <a href="https://github.com/musanico" target="_blank" rel="noopener noreferrer" class="footer-link">@Musanico</a>
+        <a href="https://github.com/Fuck996" target="_blank" rel="noopener noreferrer" class="footer-link">@Fuck996</a>
       </footer>
 
     </div>
@@ -371,7 +371,7 @@ const copyForm = async () => {
   min-height: 100vh;
   background: var(--bg);
   color: var(--text-primary);
-  font-family: 'Space Grotesk', 'DM Sans', system-ui, sans-serif;
+  font-family: 'Space Grotesk', 'Noto Sans SC', 'DM Sans', system-ui, sans-serif;
   font-size: 16px;
   line-height: 1.5;
   transition: background 200ms ease-out, color 200ms ease-out;
@@ -406,7 +406,7 @@ const copyForm = async () => {
 }
 .title-sub {
   font-family: 'Space Mono', monospace;
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 400;
   letter-spacing: 0.08em;
   color: var(--text-secondary);
@@ -437,7 +437,7 @@ const copyForm = async () => {
   align-items: center;
   gap: 5px;
   font-family: 'Space Mono', monospace;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 400;
   letter-spacing: 0.07em;
   padding: 0 14px;
@@ -447,8 +447,8 @@ const copyForm = async () => {
 }
 .mode-seg-btn:hover:not(.mode-seg-active) { color: var(--text-secondary); }
 .mode-seg-active {
-  background: var(--text-display);
-  color: var(--bg);
+  background: var(--accent);
+  color: #000;
 }
 .github-link {
   color: var(--text-secondary);
@@ -481,8 +481,8 @@ const copyForm = async () => {
 .field-narrow { max-width: 240px; }
 
 .field-label {
-  font-family: 'Space Mono', monospace;
-  font-size: 11px;
+  font-family: 'Space Mono', 'Noto Sans SC', monospace;
+  font-size: 13px;
   font-weight: 400;
   letter-spacing: 0.08em;
   color: var(--text-secondary);
@@ -504,8 +504,8 @@ const copyForm = async () => {
   border-bottom: 1px solid var(--border-visible);
   border-radius: 0;
   color: var(--text-primary);
-  font-family: 'Space Mono', monospace;
-  font-size: 13px;
+  font-family: 'Space Mono', 'Noto Sans SC', monospace;
+  font-size: 15px;
   line-height: 1.6;
   padding: 8px 0 10px;
   resize: none;
@@ -534,8 +534,8 @@ const copyForm = async () => {
   border-bottom: 1px solid var(--border-visible);
   border-radius: 0;
   color: var(--text-primary);
-  font-family: 'Space Mono', monospace;
-  font-size: 13px;
+  font-family: 'Space Mono', 'Noto Sans SC', monospace;
+  font-size: 15px;
   letter-spacing: 0.02em;
   padding: 8px 28px 10px 0;
   cursor: pointer;
@@ -568,7 +568,7 @@ const copyForm = async () => {
   color: var(--text-secondary);
   cursor: pointer;
   font-family: 'Space Mono', monospace;
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 400;
   letter-spacing: 0.06em;
   padding: 0 18px;
@@ -578,8 +578,8 @@ const copyForm = async () => {
 }
 .seg-btn:hover:not(.seg-active) { color: var(--text-primary); }
 .seg-active {
-  background: var(--text-display);
-  color: var(--bg);
+  background: var(--accent);
+  color: #000;
 }
 
 /* ── TOGGLE ───────────────────────────────────────────────────────────────── */
@@ -602,8 +602,8 @@ const copyForm = async () => {
   flex-shrink: 0;
 }
 .toggle-on {
-  background: var(--text-display);
-  border-color: var(--text-display);
+  background: var(--accent);
+  border-color: var(--accent);
 }
 .toggle-thumb {
   position: absolute;
@@ -617,11 +617,11 @@ const copyForm = async () => {
 }
 .toggle-on .toggle-thumb {
   transform: translateX(18px);
-  background: var(--bg);
+  background: #fff;
 }
 .toggle-label {
-  font-family: 'Space Mono', monospace;
-  font-size: 11px;
+  font-family: 'Space Mono', 'Noto Sans SC', monospace;
+  font-size: 13px;
   letter-spacing: 0.06em;
   color: var(--text-secondary);
   text-transform: uppercase;
@@ -639,7 +639,7 @@ const copyForm = async () => {
   border-bottom: 1px solid var(--border-visible);
   color: var(--text-primary);
   font-family: 'Space Mono', monospace;
-  font-size: 13px;
+  font-size: 15px;
   padding: 6px 0 8px;
   width: 100px;
   outline: none;
@@ -649,7 +649,7 @@ const copyForm = async () => {
 .input-text:focus { border-bottom-color: var(--text-primary); }
 .input-suffix {
   font-family: 'Space Mono', monospace;
-  font-size: 11px;
+  font-size: 13px;
   letter-spacing: 0.06em;
   color: var(--text-secondary);
   text-transform: uppercase;
@@ -658,7 +658,7 @@ const copyForm = async () => {
 /* ── INLINE ERROR ─────────────────────────────────────────────────────────── */
 .inline-error {
   font-family: 'Space Mono', monospace;
-  font-size: 12px;
+  font-size: 14px;
   letter-spacing: 0.04em;
   color: var(--accent);
   margin-top: -16px;
@@ -671,13 +671,13 @@ const copyForm = async () => {
   flex-wrap: wrap;
 }
 .btn-primary {
-  background: var(--text-display);
+  background: var(--accent);
   border: none;
   border-radius: 999px;
-  color: var(--bg);
+  color: #000;
   cursor: pointer;
   font-family: 'Space Mono', monospace;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 700;
   letter-spacing: 0.06em;
   min-height: 44px;
@@ -693,7 +693,7 @@ const copyForm = async () => {
   color: var(--text-primary);
   cursor: pointer;
   font-family: 'Space Mono', monospace;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 400;
   letter-spacing: 0.06em;
   min-height: 44px;
@@ -708,7 +708,7 @@ const copyForm = async () => {
 .output-field { position: relative; }
 .copy-status {
   font-family: 'Space Mono', monospace;
-  font-size: 11px;
+  font-size: 13px;
   letter-spacing: 0.06em;
   color: var(--text-secondary);
   position: absolute;
@@ -719,8 +719,8 @@ const copyForm = async () => {
 /* ── FOOTER ───────────────────────────────────────────────────────────────── */
 .footer {
   margin-top: 64px;
-  font-family: 'Space Mono', monospace;
-  font-size: 11px;
+  font-family: 'Space Mono', 'Noto Sans SC', monospace;
+  font-size: 13px;
   letter-spacing: 0.04em;
   color: var(--text-disabled);
   text-transform: uppercase;
